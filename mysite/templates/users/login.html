@@ -1,0 +1,20 @@
+{% extends '../base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <h2>Iniciar sesión</h2>
+    
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Iniciar sesión">
+    </form>
+
+    <h3>¿Te has olvidado tu contraseña?</h3>
+    <ul>
+        <li>
+            <a href="{% url 'password_reset' %}">Reestablecer contraseña</a>
+        </li>
+    </ul>
+{% endblock %}

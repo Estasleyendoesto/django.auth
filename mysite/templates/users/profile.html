@@ -1,0 +1,13 @@
+{% extends '../base.html' %}
+
+{% block title %}{{ profile.username }} | Profile{% endblock %}
+
+{% block content %}
+    <h1>Este es el perfil de {{ profile.username }}</h1>
+    <h2>Su email es {{ profile.email }}</h2>
+
+    {% if user.username == profile.username %}
+    <h1>ESTE PERFIL ES TUYO</h1>
+    {% endif %}
+    
+{% endblock %}

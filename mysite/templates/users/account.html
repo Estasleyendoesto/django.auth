@@ -1,0 +1,17 @@
+{% extends '../base.html' %}
+
+{% block title %}My account{% endblock %}
+
+{% block content %}
+    <h2>Mi cuenta</h2>
+    
+    <form action="{% url 'account' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Guardar">
+    </form>
+
+    <ul>
+        <li><a href="{% url 'password_change' %}">Cambiar contraseña</a></li>
+    </ul>
+{% endblock %}

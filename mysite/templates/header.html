@@ -1,0 +1,20 @@
+<header>
+    <h1>LOGOTYPE</h1>
+
+    <ul>
+        <li><a href="{% url 'home' %}">Ir al home</a></li>
+    {% if not user.is_authenticated %}
+        <li><a href="{% url 'login' %}">Iniciar sesión</a></li>
+        <li><a href="{% url 'register' %}">Registrarse</a></li>
+    {% else %}
+        {% if user.is_superuser %}
+        <li>
+            <a href="/admin/login/?next=/admin/">Administrar la plataforma</a>
+        </li>
+        {% endif %}
+        <li><a href="{% url 'profile' username=user.username %}">Ir a mi perfil</a></li>
+        <li><a href="{% url 'account' %}">Modificar Cuenta</a></li>
+        <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
+    {% endif %}
+    </ul>
+</header>
