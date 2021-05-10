@@ -55,7 +55,7 @@ Enjoyy!!
 - Modificar contraseña
 - Modificar otros campos
 - Urls propias para el usuario con `include()`
-- Eliminar cuenta (desactivar)
+- Eliminar cuenta (desactivar - is_active == False)
 - Prohibir el acceso a ciertas vistas tras su uso
 - Uso de Captchas y antispam
 - Confirmar cuenta mediante un token por email tras registrarse (con temporizador)
@@ -78,3 +78,18 @@ Enjoyy!!
 
 3. Dentro del directorio `templates/` añade el subdirectorio `auth/ - register/ - signup/`
 4. Listo
+
+
+## Librerías necesarias
+#### Pillow
+> https://pypi.org/project/Pillow/
+
+### Django Simple Captcha
+> https://pypi.org/project/django-simple-captcha/
+
+## Google reCaptcha
+Perfectamente se puede incluir
+
+> https://www.google.com/recaptcha/admin/create
+
+> https://developers.google.com/recaptcha/docs/v3

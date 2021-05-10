@@ -3,13 +3,24 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <div>
-        <h1>Bienvenido, 
-        {% if user.is_authenticated %}
-            {{ user.username }}
-        {% else %}
-            visitante
-        {% endif %}
-        !!</h1>
-    </div>
+<main class="site-home">
+    <figure class="text-center">
+        <blockquote class="blockquote">
+            <p>
+                {% if user.is_authenticated %}
+                    Welcome, {{ user.username }}
+                {% else %}
+                    Your are as a visitor
+                {% endif %}
+            </p>
+        </blockquote>
+        <figcaption class="blockquote-footer">
+            {% if request.path == '/' %}
+                Home/
+            {% else %}
+                {{ request.path }}
+            {% endif %}
+        </figcaption>
+    </figure>
+</main>
 {% endblock %}

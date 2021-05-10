@@ -7,26 +7,42 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Iniciar sesión</h2>
-    
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        {{ form }}
+<main class="text-center">
+    <h2 class="display-4 p-5">Iniciar sesión</h2>
 
-        <button class="g-recaptcha" 
+    <form action="{% url 'login' %}" method="post" id="form">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="field">
+                {% if field.errors %}
+                    <div class="errors">
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger">{{ error|escape }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="mb-3 fields">
+                    {{ field.label_tag }}
+                    {{ field }}
+                </div>
+
+                {% if field.help_text %}
+                    <p class="form-text">{{ field.help_text|safe }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button class="g-recaptcha btn btn-info" 
                 data-sitekey="6Lc4rs4aAAAAAMET49pQSliEwa-ygCx9zolfZccA" 
                 data-callback='onSubmit' 
                 data-action='submit'>Iniciar Sesión</button>
-
-        <!-- <input type="submit" value="Iniciar sesión"> -->
     </form>
 
-    <h3>¿Te has olvidado tu contraseña?</h3>
-    <ul>
-        <li>
-            <a href="{% url 'password_reset' %}">Reestablecer contraseña</a>
-        </li>
-    </ul>
+    <h5 class="pt-5">¿Te has olvidado tu contraseña?</h5>
+    <a href="{% url 'password_reset' %}">Reestablecer contraseña</a>
+</main>
 {% endblock %}
 
 {% block javascript %}
