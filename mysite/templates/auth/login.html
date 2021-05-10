@@ -2,13 +2,23 @@
 
 {% block title %}Login{% endblock %}
 
+{% block captcha %}
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+{% endblock %}
+
 {% block content %}
     <h2>Iniciar sesión</h2>
     
     <form action="{% url 'login' %}" method="post">
         {% csrf_token %}
         {{ form }}
-        <input type="submit" value="Iniciar sesión">
+
+        <button class="g-recaptcha" 
+                data-sitekey="6Lc4rs4aAAAAAMET49pQSliEwa-ygCx9zolfZccA" 
+                data-callback='onSubmit' 
+                data-action='submit'>Iniciar Sesión</button>
+
+        <!-- <input type="submit" value="Iniciar sesión"> -->
     </form>
 
     <h3>¿Te has olvidado tu contraseña?</h3>
@@ -17,4 +27,12 @@
             <a href="{% url 'password_reset' %}">Reestablecer contraseña</a>
         </li>
     </ul>
+{% endblock %}
+
+{% block javascript %}
+    <script>    
+        function onSubmit(token) {
+            document.getElementById("form").submit();
+        }
+    </script>
 {% endblock %}

@@ -5,9 +5,11 @@
 {% block content %}
     <h2>Registrarse</h2>
 
-    <form action="{% url 'signup' %}" method="post">
+    <form action="{% url 'signup' %}" method="post" id="form">
         {% csrf_token %}
         {{ form.as_p }}
+
         <input type="submit" value="Registrarse">
     </form>
 {% endblock %}
+
