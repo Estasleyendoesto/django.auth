@@ -1,0 +1,3 @@
+{% load i18n %}{% autoescape off %}
+{% blocktranslate %}Validación de registro para {{ site_name }}{% endblocktranslate %}
+{% endautoescape %}

@@ -1,6 +1,10 @@
+from django.core.exceptions import MultipleObjectsReturned
+
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+
+from .models import User
 
 UserModel = get_user_model()
 

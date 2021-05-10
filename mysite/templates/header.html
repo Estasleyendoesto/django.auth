@@ -5,7 +5,7 @@
         <li><a href="{% url 'home' %}">Ir al home</a></li>
     {% if not user.is_authenticated %}
         <li><a href="{% url 'login' %}">Iniciar sesión</a></li>
-        <li><a href="{% url 'register' %}">Registrarse</a></li>
+        <li><a href="{% url 'signup' %}">Registrarse</a></li>
     {% else %}
         {% if user.is_superuser %}
         <li>

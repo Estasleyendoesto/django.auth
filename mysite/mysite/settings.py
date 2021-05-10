@@ -136,6 +136,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # Validación de registro
-EMAIL_TOKEN_LIFE = 60 # In seconds
+EMAIL_VERIFY_TIMEOUT = 60 # In seconds
 
 SITE_ID = 1

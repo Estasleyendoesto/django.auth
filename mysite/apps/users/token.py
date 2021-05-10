@@ -1,90 +1,37 @@
-from datetime import datetime
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.crypto import constant_time_compare
+from django.utils.http import base36_to_int
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.utils.crypto import constant_time_compare, salted_hmac
-from django.utils.http import base36_to_int, int_to_base36, urlsafe_base64_decode, urlsafe_base64_encode
 
+class AccountVerifyTokenGenerator(PasswordResetTokenGenerator):
+    
+    def check_token(self, user, token):
+        """
+        Check that a password reset token is correct for a given user.
+        """
+        if not (user and token):
+            return False
 
-class EmailVerificationTokenGenerator:
-    """
-    Strategy object used to generate and check tokens for the password
-    reset mechanism.
-    """
-    try:
-         key_salt = settings.CUSTOM_SALT
-    except AttributeError:
-         key_salt = "django-email-verification.token"
-    algorithm = None
-    secret = settings.SECRET_KEY
-
-    def make_token(self, user, expiry=None):
-        """
-        Return a token that can be used once to do a password reset
-        for the given user.
-        Args:
-            user (Model): the user
-            expiry (datetime): optional forced expiry date
-        Returns:
-             (tuple): tuple containing:
-                token (str): the token
-                expiry (datetime): the expiry datetime
-        """
-        if expiry is None:
-            return self._make_token_with_timestamp(user, self._num_seconds(self._now()))
-        return self._make_token_with_timestamp(user, self._num_seconds(expiry) - settings.EMAIL_TOKEN_LIFE)
-
-    def check_token(self, token):
-        """
-        Check that a password reset token is correct.
-        Args:
-            token (str): the token from the url
-        Returns:
-            (tuple): tuple containing:
-                valid (bool): True if the token is valid
-                user (Model): the user model if the token is valid
-        """
+        # Parse the token
+        try:
+            ts_b36, _ = token.split("-")
+        except ValueError:
+            return False
 
         try:
-            email_b64, ts_b36, _ = token.split("-")
-            email = urlsafe_base64_decode(email_b64).decode()
-            user = get_user_model().objects.get(email=email)
             ts = base36_to_int(ts_b36)
-        except (ValueError, get_user_model().DoesNotExist):
-            return False, None
+        except ValueError:
+            return False
 
-        if not constant_time_compare(self._make_token_with_timestamp(user, ts)[0], token):
-            return False, None
+        # Check that the timestamp/uid has not been tampered with
+        if not constant_time_compare(self._make_token_with_timestamp(user, ts), token):
+            return False
 
-        now = self._now()
-        if (self._num_seconds(now) - ts) > settings.EMAIL_TOKEN_LIFE:
-            return False, None
+        # EMAIL_VERIFY_TIMEOUT inject
+        if (self._num_seconds(self._now()) - ts) > settings.EMAIL_VERIFY_TIMEOUT:
+            return False
 
-        return True, user
+        return True
 
-    def _make_token_with_timestamp(self, user, timestamp):
-        email_b64 = urlsafe_base64_encode(user.email.encode())
-        ts_b36 = int_to_base36(timestamp)
-        hash_string = salted_hmac(
-            self.key_salt,
-            self._make_hash_value(user, timestamp),
-            secret=self.secret,
-        ).hexdigest()
-        return f'{email_b64}-{ts_b36}-{hash_string}', \
-               datetime.fromtimestamp(timestamp + settings.EMAIL_TOKEN_LIFE)
-
-    @staticmethod
-    def _make_hash_value(user, timestamp):
-        login_timestamp = '' if user.last_login is None else user.last_login.replace(microsecond=0, tzinfo=None)
-        return str(user.pk) + user.password + str(login_timestamp) + str(timestamp)
-
-    @staticmethod
-    def _num_seconds(dt):
-        return int((dt - datetime(2001, 1, 1)).total_seconds())
-
-    @staticmethod
-    def _now():
-        return datetime.now()
-
-
-default_token_generator = EmailVerificationTokenGenerator()
+account_activation_token = AccountVerifyTokenGenerator()
