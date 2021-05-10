@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Email verificado</title>
+</head>
+<body>
+
+{% if user.is_authenticated %}
+    {{ user.username }}, your account is confirmed!
+{% else %}
+    Error, invalid token!
+{% endif %}
+
+{# Con un script redireccionar a cualquier otro sitio !IMPORTANTE! #}
+
+</body>
+</html>

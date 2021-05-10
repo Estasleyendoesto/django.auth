@@ -1,0 +1,6 @@
+<h1>You are almost there, {{ user.username }}!</h1>
+<h2>Please click on the link to confirm your account</h2>
+
+{{ protocol }}://{{ domain }}{% url 'signup_email_confirm' uidb64=uid token=token %}
+
+<h2>The token expires in one minuts</h2>

@@ -8,7 +8,7 @@ class AccountVerifyTokenGenerator(PasswordResetTokenGenerator):
     
     def check_token(self, user, token):
         """
-        Check that a password reset token is correct for a given user.
+        Check that a account validation token is correct for a given user.
         """
         if not (user and token):
             return False
