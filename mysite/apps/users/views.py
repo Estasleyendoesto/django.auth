@@ -8,10 +8,12 @@ from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.urls import reverse, reverse_lazy
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import LoginForm, RegisterForm
 from .models import User
+
+from .verify import verify_token, send_email
 
 
 class Login(LoginView):
@@ -29,15 +31,38 @@ class Login(LoginView):
 
 
 class Register(CreateView):
-    template_name = 'users/register.html'
+    template_name = 'users/register_confirm.html'
     form_class = RegisterForm
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('register_complete')
 
     def dispatch(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             return redirect(self.request.user)
 
         return super().dispatch(*args, **kwargs)
+
+    def get_success_url(self):
+        self.object.is_active = False
+        send_email( self.object )
+
+        return super().get_success_url()
+
+
+class RegisterComplete(TemplateView):
+    template_name = 'users/register_complete.html'
+
+
+class RegisterVerify(TemplateView):
+    template_name = 'users/register_verify_done.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        success, user = verify_token(kwargs['token'])
+        context['request'] = self.request
+        context['success'] = success
+        context['user']    = user
+
+        return context
 
 
 class Logout(LogoutView):

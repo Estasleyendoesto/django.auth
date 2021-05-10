@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'apps.users',
 ]
@@ -131,3 +132,10 @@ AUTHENTICATION_BACKENDS = ['apps.users.backends.UsernameEmailBackend']
 
 # Esto para el modo de desarrollo (eliminar en producción)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+
+# Validación de registro
+EMAIL_TOKEN_LIFE = 60 # In seconds
+
+SITE_ID = 1

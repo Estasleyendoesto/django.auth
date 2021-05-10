@@ -98,6 +98,8 @@ Enjoyy!!
 
 - Uso de Captchas y antispam L'
 
+- Confirmar cuenta mediante un token por email tras registrarse (con temporizador)
+
 
 
 
@@ -110,6 +112,8 @@ Enjoyy!!
 
     ```py
 
+    INSTALLED_APPS += ['django.contrib.sites',]
+
     AUTH_USER_MODEL = 'users.User'
 
     AUTHENTICATION_BACKENDS = ['apps.users.backends.UsernameEmailBackend']
@@ -119,6 +123,12 @@ Enjoyy!!
     # Esto para el modo de desarrollo (eliminar en producción)
 
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+    # Expiración del token
+    EMAIL_TOKEN_LIFE = 60 # In seconds
+
+    # La url de Sites
+    SITE_ID = 1
 
     ```
 
