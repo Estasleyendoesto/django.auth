@@ -1,95 +1,210 @@
-# Django Users Manager
+![](cover.png)
+
+# Django user.auth
 
 > Creado el 01-05-2021
 
 
-Extendiendo la clase Usuarios con AbstractUser e implementando sistema personalizado de Login, Register y Logout usando un formulario que valide campos personalizados.
+
+Extendiendo el modelo `User` con `AbstractUser` para añadir campos adicionales o modificar los ya existentes. Incluye un sistema de autenticación personalizado usando el propio que trae Django por defecto además de nuevas funcionalidades. Este es un proyecto base del que se puede partir para ahorrarse programar la autenticación de usuarios en gran medida.
+
 
 
 ## Instalación
-```shell
 
+```bash
+mkdir user.auth
+```
+
+```bash
+git clone https://github.com/Estasleyendoesto/django.auth.git .
+```
+
+ ```bash
+rm -rf .git
+ ```
+
+```bash
 python -m venv venv
-
 ```
 
-```shell
+ ```bash
+ venv\scripts\activate
+ ```
 
-venv\scripts\activate
-
-```
-
-```shell
-
+```bash
 pip install -r requirements.txt
-
 ```
 
-```shell
-
+ ```bash
 cd mysite
+ ```
 
-```
-
-```shell
-
+```bash
 py manage.py runserver
-
 ```
 
-```shell
-
-Enjoyy!!
-
-```
 
 
 ## Funcionalidades
-- Modelo User Custom con AbstractUser
-- Login (con username y email)
-- Registro (con username y email)
-- Perfil del usuario
-- Logout
-- Respuesta al introducir en la url usuario que no existe
-- Modificar email
-- Modificar contraseña
-- Modificar otros campos
-- Urls propias para el usuario con `include()`
-- Eliminar cuenta (desactivar - is_active == False)
-- Prohibir el acceso a ciertas vistas tras su uso
-- Uso de Captchas y antispam
-- Confirmar cuenta mediante un token por email tras registrarse (con temporizador)
+
+- Posibilidad de añadir campos al modelo `User`
+- Login mediante nombre de usuario o email
+- Registro con verificación de cuenta mediante un token por email con temporizador
+- Logout con redirección a otra vista
+- Acceso al perfil del usuario mediante el nombre de usuario y `get_absolute_url()`
+- Configuración de la cuenta
+- Cambio de contraseña confirmando con la contraseña anterior
+- Reestablecer la contraseña en caso de olvido mediante un token por email y con temporizador
+- Eliminar cuenta (desactivar) `No implementado, pero es con user.is_active = False`
+- Restricción de acceso a ciertas vistas, ej. la vista registro si el usuario ha iniciado sesión
+- Error 404 si se introduce el perfil de un usuario que no existe (posibilidad de redirección)
+- Uso de Google reCaptcha y captchas nativos para Django
+- Urls personalizables
+
 
 
 ## Cómo integrarlo a mi proyecto
-1. Dentro del directorio `apps/` copia la aplicación users y pégalo dentro de tu proyecto.
-2. Registra la aplicación dentro de `settings.py` y añade lo siguiente:
 
-    ```py
-        AUTH_USER_MODEL = 'users.User'
-        AUTHENTICATION_BACKENDS = ['apps.users.backends.UsernameEmailBackend']
+No he creado una aplicación directa para instalar con pip porque no se podría personalizar en su totalidad. En su lugar prefiero optar por integrarlo manualmente en mi proyecto y así tener un mayor nivel de personalización.
 
-        # Esto para el modo de desarrollo (eliminar en producción)
-        EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-        # Expiración del token
-        EMAIL_VERIFY_TIMEOUT = 60 # In seconds
-    ```
 
-3. Dentro del directorio `templates/` añade el subdirectorio `auth/ - register/ - signup/`
-4. Listo
+#### Instrucciones
+
+1. Instalar [Pillow](https://pypi.org/project/Pillow/) y [Django Simple Captcha](https://pypi.org/project/django-simple-captcha/) 
+
+1. Copiar el directorio `users/` dentro de `apps/` en nuestro proyecto
+
+2. Comprobar dentro de `users/apps.py`...
+
+   ```python
+   from django.apps import AppConfig
+   
+   class UsersConfig(AppConfig):
+       default_auto_field = 'django.db.models.BigAutoField'
+       
+       # Si nuestras aplicaciones están dentro del directorio apps
+       name = 'apps.users'
+       # Si están en la raíz
+       name = 'users'
+   
+   ```
+
+3. Registrar dentro de `settings.py`
+
+   ```python
+   TEMPLATES = [
+   	{
+   		'DIRS': [ BASE_DIR / 'templates' ],
+   	}
+   ]
+   
+   STATICFILES_DIRS = [
+       BASE_DIR / "static"
+   ]
+   
+   INSTALLED_APPS += [
+   	'apps.users',
+       'captcha',
+   ]
+   
+   # 'apps.' si las aplicaciones están dentro del directorio apps/, sino eliminar 'apps.'
+   AUTHENTICATION_BACKENDS = ['apps.users.backends.UsernameEmailBackend']
+   AUTH_USER_MODEL = 'users.User'
+   EMAIL_VERIFY_TIMEOUT = 60 # In seconds
+   PASSWORD_RESET_TIMEOUT = 60 * 60 # In seconds
+   
+   # Envío de email por consola (eliminar en producción)
+   EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+   ```
+
+4. Registrarlo en `urls.py`
+
+   ```python
+   urlpatterns = [
+       #...
+   	path('member/', include('apps.users.urls')),
+   	path('captcha/', include('captcha.urls')),
+   ]
+   ```
+
+5. Copiar el directorio `templates/` a la raíz
+
+6. Copiar el directorio `static/` a la raíz
+
+7. Instalar
+
+   ```bash
+   py manage.py makemigrations
+   py manage.py migrate
+   ```
+
+8. ```bash
+   py manage.py runserver
+   ```
+
 
 
 ## Librerías necesarias
+
 #### Pillow
-> https://pypi.org/project/Pillow/
 
-### Django Simple Captcha
-> https://pypi.org/project/django-simple-captcha/
+```
+https://pypi.org/project/Pillow/
+```
 
-## Google reCaptcha
-Perfectamente se puede incluir
 
-> https://www.google.com/recaptcha/admin/create
 
-> https://developers.google.com/recaptcha/docs/v3
+#### Django Simple Captcha
+
+```
+https://pypi.org/project/django-simple-captcha/
+```
+
+
+
+### Google reCaptcha
+
+```
+https://www.google.com/recaptcha/admin/create
+https://developers.google.com/recaptcha/docs/v3
+```
+
+
+
+## A tener en cuenta
+
+El fichero `users/sender.py` dentro de la función `send_email(...)` podrías tener la necesidad de cambiar el sujeto del email `subject...` o la ruta del template del email `message...`
+
+Si no implementas `EMAIL_VERIFY_TIMEOUT` dentro de `settings.py` podrías obtener un error.
+
+Si tus aplicaciones están dentro de un directorio `apps/` dentro del fichero `users/apps.py` debes modificar `name=apps.user`. De tenerlo en la raíz debería ser `name=user`
+
+Si tu proyecto aún no tiene una vista `home` puedes apañártelas con esto:
+
+```python
+# mysite/urls.py
+from django.views.generic import TemplateView
+
+urlpatterns += [
+	path('', TemplateView.as_view(template_name="home.html"), name='home'),
+]
+```
+
+No olvides habilitar el uso de ficheros estáticos en la fase de desarrollo si no se muestran correctamente:
+
+```python
+# mysite/urls.py
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # If media/ exists
+```
+
+El uso de Google reCaptcha existe un ejemplo dentro del template `login.html`, sino sigue la documentación.
+
+Los captchas para Django son altamente personalizables, verificar desde la documentación oficial.
