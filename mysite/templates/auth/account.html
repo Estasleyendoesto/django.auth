@@ -1,17 +1,21 @@
 {% extends '../base.html' %}
 
-{% block title %}My account{% endblock %}
+{% block title %}Mi cuenta{% endblock %}
 
 {% block content %}
-    <h2>Mi cuenta</h2>
+<main class="text-center">
+    <h2 class="display-4 p-5">Mi cuenta</h2>
     
     <form action="{% url 'account' %}" method="post">
         {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Guardar">
+
+        {% include 'form.html' %}
+
+        <button class="btn btn-info">Guardar cambios</button>
     </form>
 
-    <ul>
-        <li><a href="{% url 'password_change' %}">Cambiar contraseña</a></li>
-    </ul>
+    <h5 class="pt-5">Seguridad</h5>
+    <a href="{% url 'password_change' %}">Cambiar contraseña</a>
+
+</main>
 {% endblock %}

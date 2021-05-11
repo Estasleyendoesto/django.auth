@@ -1,6 +1,6 @@
-<h1>You are almost there, {{ user.username }}!</h1>
-<h2>Please click on the link to confirm your account</h2>
+<h1>Ya casi está todo listo, {{ user.username }}!</h1>
+<h2>Haz click en el siguiente enlace para verificar tu cuenta</h2>
 
 {{ protocol }}://{{ domain }}{% url 'signup_email_confirm' uidb64=uid token=token %}
 
-<h2>The token expires in one minuts</h2>
+<h2>Este enlace expirará en un minuto</h2>

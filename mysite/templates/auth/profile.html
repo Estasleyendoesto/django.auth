@@ -1,13 +1,18 @@
 {% extends '../base.html' %}
 
-{% block title %}{{ profile.username }} | Profile{% endblock %}
+{% block title %}Member | {{ profile.username }}{% endblock %}
 
 {% block content %}
-    <h1>Este es el perfil de {{ profile.username }}</h1>
-    <h2>Su email es {{ profile.email }}</h2>
-
-    {% if user.username == profile.username %}
-    <h1>ESTE PERFIL ES TUYO</h1>
-    {% endif %}
-    
+<main class="site-home">
+    <figure class="text-center">
+        <blockquote class="blockquote">
+            <p>
+                Este es el perfil de {{ profile.username }}
+            </p>
+        </blockquote>
+        <figcaption class="blockquote-footer">
+            {{ profile.email }}
+        </figcaption>
+    </figure>
+</main>
 {% endblock %}

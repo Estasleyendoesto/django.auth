@@ -1,7 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Libre+Barcode+39+Text&display=swap');
-
 body {
-    background-image: url('img/absurdity.png');
+    background-image: url('img/brilliant.png');
     background-repeat: repeat;
     background-color: #fdfdfd;
 }
@@ -15,9 +13,8 @@ body {
 }
 
 .navbar-brand {
-    font-family: 'Libre Barcode 39 Text', cursive;
     font-weight: 700;
-    font-size: 3.6em;
+    font-size: 1.8em;
     color: #1d1d1d;
 }
 
@@ -58,6 +55,10 @@ form {
     padding: 0 20px;
     width: 50%;
     margin: 0 auto;
+}
+
+main {
+    margin-bottom: 120px;
 }
 
 .site-home {

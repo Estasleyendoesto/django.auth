@@ -2,7 +2,9 @@
 
 <header class="navbar">
 <div class="container-fluid header-content">
-    <a class="navbar-brand" href="{% url 'home' %}">USER AUTHENTICATION</a>
+    <a class="navbar-brand" href="{% url 'home' %}">
+        <img class="rounded" src="{% static 'img/homer.gif' %}" alt="Home" width="180">
+    </a>
 
     <nav class="navbar-nav">
         {% if not user.is_authenticated %}

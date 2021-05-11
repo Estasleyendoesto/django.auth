@@ -1,18 +1,33 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Email verificado</title>
-</head>
-<body>
+{% extends '../base.html' %}
 
-{% if user.is_authenticated %}
-    {{ user.username }}, your account is confirmed!
-{% else %}
-    Error, invalid token!
-{% endif %}
+{% block title %}Cuenta verificada{% endblock %}
 
-{# Con un script redireccionar a cualquier otro sitio !IMPORTANTE! #}
+{% block content %}
+<main class="site-home">
+    <figure class="text-center">
+        <blockquote class="blockquote">
+            <p>
+                Verificación de cuenta {% if user.is_authenticated %} exitosa {% else %} fallida {% endif %}
+            </p>
+        </blockquote>
+        <figcaption class="blockquote-footer">
+            {% if user.is_authenticated %}
+                {{ user.username }}, tu cuenta ha sido comfirmada!
+            {% else %}
+                Enlace inválido o expirado!
+            {% endif %}
+        </figcaption>
+        <figcaption class="blockquote-footer">
+            Redirigiendo en 5 segundos
+        </figcaption>
+    </figure>
+</main>
+{% endblock %}
 
-</body>
-</html>
+{% block javascript %}
+<script>
+    setTimeout(function() {
+        window.location.href = "{% url 'home' %}";
+    }, 5000);
+</script>
+{% endblock %}
