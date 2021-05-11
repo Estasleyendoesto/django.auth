@@ -65,7 +65,7 @@ py manage.py runserver
 
 
 ## Cómo integrarlo a mi proyecto
-No puede integrarse en un proyecto ya creado porque estamos usando `AbstractUser`, aconsejo copiar el repositorio siguiendo la instalación y trabajar a partir de allí usándolo como base. Si tienes tus propias preferencias en organizar tu proyecto puedes usar las instrucciones para intentar adaptarlo e integrarlo, quizás te encuentres con errores al importar los módulos pero nada que no pueda solucionarse fácilmente. Recuerda que debes reemplazar el modelo `User` que trae Django por defecto con `AbstracUser`, puedes hacerlo siguiendo la (documentación oficial)[https://docs.djangoproject.com/en/3.2/topics/auth/customizing/#substituting-a-custom-user-model]
+No puede integrarse en un proyecto ya creado porque estamos usando `AbstractUser`, aconsejo copiar el repositorio siguiendo la instalación y trabajar a partir de allí usándolo como base. Si tienes tus propias preferencias en organizar tu proyecto puedes usar las instrucciones para intentar adaptarlo e integrarlo, quizás te encuentres con errores al importar los módulos pero nada que no pueda solucionarse fácilmente. Recuerda que debes reemplazar el modelo `User` que trae Django por defecto con `AbstracUser`, puedes hacerlo siguiendo la [documentación oficial](https://docs.djangoproject.com/en/3.2/topics/auth/customizing/#substituting-a-custom-user-model)
 
 No he creado una aplicación directa para instalar con pip porque no se podría personalizar en su totalidad. En su lugar prefiero optar por integrarlo manualmente en mi proyecto y así tener un mayor nivel de personalización.
 
